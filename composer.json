@@ -1,0 +1,24 @@
+{
+    "name": "harman/payroll-api",
+    "description": "Payroll API on AWS Lambda with Bref (CSV data, JSON responses, PDF payslips on S3)",
+    "type": "project",
+    "require": {
+        "php": ">=8.2",
+        "bref/bref": "^3.0",
+        "dompdf/dompdf": "^3.0",
+        "aws/aws-sdk-php": "^3.300"
+    },
+    "autoload": {
+        "psr-4": { "App\\": "src/" }
+    },
+    "scripts": {
+        "pre-autoload-dump": "Aws\\Script\\Composer\\Composer::removeUnusedServices"
+    },
+    "extra": {
+        "aws/aws-sdk-php": ["S3"]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+}

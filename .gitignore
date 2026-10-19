@@ -1,0 +1,4 @@
+/vendor/
+/.serverless/
+/node_modules/
+.env

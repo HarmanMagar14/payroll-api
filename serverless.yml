@@ -1,0 +1,39 @@
+service: sam10-payroll-magar
+
+custom:
+    # CHANGE THIS to the S3 bucket you created before the lab
+    payslipBucket: magar-payslips-sam10
+
+provider:
+    name: aws
+    region: us-east-1        # must match the region of your S3 bucket
+    environment:
+        PAYSLIP_BUCKET: ${self:custom.payslipBucket}
+    iam:
+        role:
+            statements:
+                # Least privilege: Lambda may only upload into payslips/*
+                -   Effect: Allow
+                    Action:
+                        - s3:PutObject
+                    Resource: arn:aws:s3:::${self:custom.payslipBucket}/payslips/*
+
+functions:
+    api:
+        handler: public/index.php
+        runtime: php-84-fpm
+        timeout: 28          # API Gateway max is 29 seconds
+        memorySize: 1024     # Dompdf is faster with more memory/CPU
+        events:
+            -   httpApi: '*'
+
+package:
+    patterns:
+        - '!node_modules/**'
+        - '!tests/**'
+        - '!.git/**'
+        - '!scripts/**'
+        - '!README.md'
+
+plugins:
+    - ./vendor/bref/bref
